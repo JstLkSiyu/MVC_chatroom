@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="chat.dao.UserDao">
+    <resultMap id="login_result_map" type="chat.entity.User">
+        <id column="uid" property="uid" />
+        <result column="birthday" property="birthday" />
+        <result column="gender" property="gender" />
+    </resultMap>
+
+    <resultMap id="userInfo_result_map" type="chat.entity.User">
+        <id column="uid" property="uid" />
+        <result column="uname" property="uname" />
+        <result column="gender" property="gender" />
+        <result column="birthday" property="birthday" />
+    </resultMap>
+
+    <!--插入用户资料，用于新增用户（注册）-->
+    <insert id="register">
+        INSERT INTO users
+        VALUE(#{uid}, #{uname}, #{password}, #{gender}, #{birthday})
+    </insert>
+
+    <!--根据用户名和密码查找用户信息，用于登录-->
+    <select id="login" resultMap="login_result_map">
+        SELECT uid, birthday, gender
+        FROM users
+        WHERE uname=#{uname} AND password=#{password}
+    </select>
+
+    <!--根据用户ID查找对应用户资料-->
+    <select id="getUserInfoByUid" resultMap="userInfo_result_map">
+        SELECT uname, birthday, gender, uid
+        FROM users
+        WHERE uid=#{uid}
+    </select>
+
+    <!--根据模糊用户名查找用户资料-->
+    <select id="searchUsersByUname" resultMap="userInfo_result_map">
+        SELECT uid, uname, birthday, gender
+        FROM users
+        WHERE uname LIKE '%${uname}%'
+    </select>
+
+</mapper>

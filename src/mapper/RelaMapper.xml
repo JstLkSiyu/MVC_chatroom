@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="chat.dao.RelationDao">
+
+    <resultMap id="userInfo_result_map" type="chat.entity.User">
+        <id column="uid" property="uid" />
+        <result column="uname" property="uname" />
+        <result column="gender" property="gender" />
+        <result column="birthday" property="birthday" />
+    </resultMap>
+
+    <resultMap id="friend_request_map" type="chat.entity.FriendRequest">
+        <id column="from" property="from" />
+        <id column="to" property="to" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <!--添加关系-->
+    <insert id="addRelation">
+        INSERT INTO relation
+        VALUE(#{u1id}, #{u2id}, #{day})
+    </insert>
+
+    <!--删除关系-->
+    <delete id="delRelation">
+        DELETE FROM relation
+        WHERE u1id=#{u1id} AND u2id=#{u2id}
+    </delete>
+
+    <!--查询所有好友信息-->
+    <select id="queryRelationOfUid" resultMap="userInfo_result_map">
+        SELECT uid, uname, birthday, gender
+        FROM users
+        WHERE EXISTS
+        (SELECT * FROM relation
+        WHERE (u1id = users.uid AND u2id = #{uid})
+        OR (u1id = #{uid} AND u2id = users.uid))
+    </select>
+
+    <!--添加一条临时好友请求-->
+    <insert id="pushFriendRequest">
+        INSERT INTO friend_request
+        VALUE(#{from}, #{to}, "incomplete")
+    </insert>
+
+    <!--根据被请求ID获取所有好友请求-->
+    <select id="getFriendRequestByToUid" resultMap="friend_request_map">
+        SELECT `from`, `to`, status
+        FROM friend_request
+        WHERE `to`=#{uid}
+    </select>
+
+    <!--查看用户发出的好友请求-->
+    <select id="getFriendRequestByFromUid" resultMap="friend_request_map">
+        SELECT `from`, `to`, statue
+        FROM friend_request
+        WHERE `from`=#{uid}
+    </select>
+
+    <!--删除 from 对 to 的好友请求记录-->
+    <delete id="popFriendRequest">
+        DELETE FROM friend_request
+        WHERE `from`=#{from} AND `to`=#{to}
+    </delete>
+
+    <!--双向删除好友请求记录-->
+    <delete id="popBothFriendRequest">
+        DELETE FROM friend_request
+        WHERE (`from`=#{u1id} AND `to`=#{u2id})
+        OR (`from`=#{u2id} AND `to`=#{u1id})
+    </delete>
+
+</mapper>
