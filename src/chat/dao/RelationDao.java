@@ -20,9 +20,11 @@ public interface RelationDao {
 
     int popFriendRequest(@Param("from") String from, @Param("to") String to);
 
-    int popBothFriendRequest(@Param("u1id") String u1id, @Param("u2id") String u2id);
+    void popBothFriendRequest(@Param("u1id") String u1id, @Param("u2id") String u2id);
 
     List<FriendRequest> getFriendRequestByFromUid(@Param("uid") String uid);
 
     List<FriendRequest> getFriendRequestByToUid(@Param("uid") String uid);
+
+    int changeStatus(@Param("from") String from, @Param("to") String to, @Param("status") String status);
 }

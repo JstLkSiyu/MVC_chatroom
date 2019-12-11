@@ -62,4 +62,8 @@ public class RelationService {
     public List<FriendRequest> getFriendRequestByToUid(String to) {
         return relationDao.getFriendRequestByToUid(to);
     }
+
+    public boolean changeStatus(String from, String to, String status) {
+        return relationDao.changeStatus(from, to, status) > 0;
+    }
 }

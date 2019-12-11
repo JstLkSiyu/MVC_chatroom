@@ -19,7 +19,7 @@ public class UserService {
     }
 
     public boolean register(String uname, String password, String gender, String birthday) {
-        String uid = "u_" + MiscUtils.encode(uname, String.valueOf(Math.random())).substring(7, 23);
+        String uid = "u_" + MiscUtils.encode(uname, password).substring(7, 23);
         password = "*" + MiscUtils.encode(password);
         return userDao.register(uid, uname, password, gender, MiscUtils.convertStringToTimestamp(birthday)) > 0;
     }

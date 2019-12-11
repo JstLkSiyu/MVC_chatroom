@@ -7,7 +7,8 @@ public class FriendRequest {
 
     private String from;
     private String to;
-    private FriendQueryStatus status;
+    private String status;
+    private User user;
 
     /*
     Getter
@@ -20,13 +21,17 @@ public class FriendRequest {
         return from;
     }
 
-    public FriendQueryStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     /*
-    Setter
-     */
+        Setter
+         */
     public void setTo(String to) {
         this.to = to;
     }
@@ -35,7 +40,11 @@ public class FriendRequest {
         this.from = from;
     }
 
-    public void setStatus(FriendQueryStatus status) {
+    public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

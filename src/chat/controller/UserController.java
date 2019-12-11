@@ -30,6 +30,7 @@ public class UserController {
             Store uid of user into session as signal of login
              */
             session.setAttribute("uid", user.getUid());
+            session.setAttribute("uname", user.getUname());
             /*
             Package the JSON response body
              */
@@ -72,7 +73,7 @@ public class UserController {
     public Map<String, Object> logout(HttpSession session) {
         Map<String, Object> json = new HashMap<>();
         try {
-            session.removeAttribute("uid");
+            session.invalidate();
             json.put("success", true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,22 +142,4 @@ public class UserController {
         return json;
     }
 
-
-    private String generateToken(String uid, HttpSession session) {
-        /*
-        Generate a salt value if the session not exists salt,
-        encode the salt with uid to generate a token key,
-        when the token transmitted from fore side was faked,
-        encode(uid, salt) != token,
-        then the real websocket connection could not be occupied
-         */
-        String salt;
-        if(session.getAttribute("token_salt") == null) {
-            salt = Double.toString(Math.random());
-            session.setAttribute("token_salt", salt);
-        } else {
-            salt = (String) session.getAttribute("token_salt");
-        }
-        return MiscUtils.encode(uid, salt);
-    }
 }

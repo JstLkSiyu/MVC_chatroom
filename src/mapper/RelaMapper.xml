@@ -11,10 +11,26 @@
         <result column="birthday" property="birthday" />
     </resultMap>
 
-    <resultMap id="friend_request_map" type="chat.entity.FriendRequest">
-        <id column="from" property="from" />
-        <id column="to" property="to" />
+    <!--获取收到的请求状态-->
+    <resultMap id="got_request_map" type="chat.entity.FriendRequest">
+        <id column="uid" property="from" />
         <result column="status" property="status" />
+        <association property="user" javaType="chat.entity.User">
+            <result column="uname" property="uname" />
+            <result column="birthday" property="birthday" />
+            <result column="gender" property="gender" />
+        </association>
+    </resultMap>
+
+    <!--获取发送的请求状态-->
+    <resultMap id="sent_request_map" type="chat.entity.FriendRequest">
+        <id column="uid" property="to" />
+        <result column="status" property="status" />
+        <association property="user" javaType="chat.entity.User">
+            <result column="uname" property="uname" />
+            <result column="birthday" property="birthday" />
+            <result column="gender" property="gender" />
+        </association>
     </resultMap>
 
     <!--添加关系-->
@@ -46,17 +62,19 @@
     </insert>
 
     <!--根据被请求ID获取所有好友请求-->
-    <select id="getFriendRequestByToUid" resultMap="friend_request_map">
-        SELECT `from`, `to`, status
-        FROM friend_request
-        WHERE `to`=#{uid}
+    <select id="getFriendRequestByToUid" resultMap="got_request_map">
+        SELECT uname, status, uid, gender, birthday
+        FROM friend_request, users
+        WHERE friend_request.`from` = users.uid
+        AND `to` = #{uid}
     </select>
 
     <!--查看用户发出的好友请求-->
-    <select id="getFriendRequestByFromUid" resultMap="friend_request_map">
-        SELECT `from`, `to`, statue
-        FROM friend_request
-        WHERE `from`=#{uid}
+    <select id="getFriendRequestByFromUid" resultMap="sent_request_map">
+        SELECT uname, status, uid, gender, birthday
+        FROM friend_request, users
+        WHERE friend_request.`to` = users.uid
+        AND `from` = #{uid}
     </select>
 
     <!--删除 from 对 to 的好友请求记录-->
@@ -71,5 +89,12 @@
         WHERE (`from`=#{u1id} AND `to`=#{u2id})
         OR (`from`=#{u2id} AND `to`=#{u1id})
     </delete>
+
+    <!--将请求记录的状态从未处理转化为同意或拒绝-->
+    <update id="changeStatus">
+        UPDATE friend_request
+        SET status = #{status}
+        WHERE `from` = #{from} AND `to` = #{to}
+    </update>
 
 </mapper>

@@ -1,12 +1,14 @@
 package chat.utils;
 
+import chat.controller.WebsocketController;
 import chat.entity.JsonUser;
 import chat.entity.User;
 import org.springframework.util.DigestUtils;
 
+import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class MiscUtils {
 
@@ -48,5 +50,29 @@ public class MiscUtils {
 
     public static Timestamp convertStringToTimestamp(String raw) {
         return Timestamp.valueOf(raw);
+    }
+
+    public static Timestamp convertLocalDateTimeToTimestamp(LocalDateTime time) {
+        return Timestamp.valueOf(time);
+    }
+
+    public static Map<String, Object> packMessageJson(String uid, String msg) {
+        Map<String, Object> message = new HashMap<>(), resp = new HashMap<>();
+        resp.put("type", WebsocketController.msgType.MESSAGE);
+        message.put("fid", uid);
+        message.put("msg", msg);
+        resp.put("msg", message);
+        return resp;
+    }
+
+    public static String generateToken(String uid, HttpSession session) {
+        String salt;
+        if(session.getAttribute("token_salt") == null) {
+            salt = Double.toString(Math.random());
+            session.setAttribute("token_salt", salt);
+        } else {
+            salt = (String) session.getAttribute("token_salt");
+        }
+        return MiscUtils.encode(uid, salt);
     }
 }

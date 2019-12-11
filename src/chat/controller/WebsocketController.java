@@ -23,11 +23,11 @@ import java.util.concurrent.ConcurrentSkipListMap;
 @ServerEndpoint("/websocket/{token}")
 public class WebsocketController {
 
-    private enum msgType {
-        MESSAGE, FRIEND_QUERY, SYSTEM
+    public enum msgType {
+        MESSAGE, SYSTEM
     }
 
-    public static ConcurrentSkipListMap<String, WebsocketController> webSocketMap = new ConcurrentSkipListMap<>();
+    private static ConcurrentSkipListMap<String, WebsocketController> webSocketMap = new ConcurrentSkipListMap<>();
 
     private Session session;
     private String token;
@@ -73,14 +73,6 @@ public class WebsocketController {
         this.session = session;
         this.token = token;
         webSocketMap.put(token, this);
-        Map<String, Object> json = new HashMap<>();
-        json.put("type", msgType.SYSTEM);
-        json.put("msg", "当前在线人数" + webSocketMap.size());
-        sendObject(json);
-        json.clear();
-        json.put("type", msgType.SYSTEM);
-        json.put("msg", "欢迎" + token + "上线");
-        sendGroupObject(json);
     }
 
     @OnError

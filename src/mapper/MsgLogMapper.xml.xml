@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chat.dao.MsgLogDao">
+
+    <resultMap id="log_map" type="chat.entity.MsgLog">
+        <result column="from" property="from" />
+        <result column="to" property="to" />
+        <result column="msg" property="msg" />
+        <result column="log_time" property="log_time" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <!--添加一条未读消息-->
+    <insert id="addLog">
+        INSERT INTO msg_log(`from`, `to`, status, log_time, msg)
+        VALUE(#{from}, #{to}, 'unread', #{log_time}, #{msg})
+    </insert>
+
+    <!--获取fid与uid之间最近limit条消息-->
+    <select id="searchRecentLogByUidAndFid" resultMap="log_map">
+        SELECT *
+        FROM msg_log
+        WHERE (`to` = #{uid} AND `from` = #{fid}) OR
+        (`from` = #{uid} AND `to` = #{fid})
+        ORDER BY log_time DESC
+        LIMIT ${limit}
+    </select>
+
+    <!--将from发给to的消息设置为已读-->
+    <update id="setStatusRead">
+        UPDATE msg_log
+        SET status = 'read'
+        WHERE `from` = #{from}
+        AND `to` = #{to}
+        AND status = 'unread'
+    </update>
+</mapper>

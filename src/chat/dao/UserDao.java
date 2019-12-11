@@ -17,4 +17,5 @@ public interface UserDao {
     List<User> getUserInfoByUid(@Param("uid") String uid);
 
     List<User> searchUsersByUname(@Param("uname") String uname);
+
 }
