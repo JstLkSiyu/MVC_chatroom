@@ -14,4 +14,6 @@ public interface MsgLogDao {
     List<MsgLog> searchRecentLogByUidAndFid(@Param("uid") String uid, @Param("fid") String fid, @Param("limit") int limit);
 
     void setStatusRead(@Param("from") String from, @Param("to") String to);
+
+    List<MsgLog> downloadLog(@Param("uid") String uid, @Param("fid") String fid);
 }

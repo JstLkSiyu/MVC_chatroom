@@ -4,6 +4,7 @@ import chat.entity.FriendRequest;
 import chat.entity.JsonUser;
 import chat.entity.User;
 import chat.service.RelationService;
+import chat.service.UserService;
 import chat.utils.MiscUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -23,6 +24,8 @@ import java.util.Map;
 public class RelationController {
     @Autowired
     private RelationService relationService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("get_friend_list")
     @ResponseBody
@@ -179,8 +182,8 @@ public class RelationController {
             if(relationService.changeStatus(fid, uid, "agree") && addRelation(uid, fid)) {
                 json.put("success", true);
                 Map<String, Object> requestResponse = new HashMap<>();
-                requestResponse.put("type", WebsocketController.msgType.SYSTEM);
-                requestResponse.put("msg", uname + "同意了您的好友请求");
+                requestResponse.put("type", WebsocketController.msgType.AGREE_REQ);
+                requestResponse.put("friend", MiscUtils.packageJsonUser(userService.getUserInfoByUid(uid))[0]);
                 try {
                     WebsocketController.getWebSocketMap().get(fid).sendObject(requestResponse);
                 } catch (NullPointerException npe) {

@@ -1,7 +1,9 @@
 package chat.controller;
 
+import chat.entity.FriendAppraise;
 import chat.entity.JsonUser;
 import chat.entity.User;
+import chat.service.RelationService;
 import chat.service.UserService;
 import chat.utils.MiscUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ import java.util.*;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RelationService relationService;
 
     @PostMapping(value = "login")
     @ResponseBody
@@ -96,16 +101,17 @@ public class UserController {
                 User user = result.get(0);
                 Map<String, Object> userInfo = new HashMap<>();
 
-                //String token = generateToken(user.getUid(), session);
                 userInfo.put("username", user.getUname());
                 userInfo.put("age", MiscUtils.convertBirthdayToAge(user.getBirthday()));
                 userInfo.put("gender", user.getGender());
                 userInfo.put("isLogin", true);
-                //userInfo.put("token", token);
                 userInfo.put("uid", user.getUid());
 
                 json.put("success", true);
                 json.put("userInfo", userInfo);
+            } else {
+                json.put("success", false);
+                json.put("error", "你号没了");
             }
         } catch (NullPointerException npe) {
             json.put("success", true);
@@ -142,4 +148,37 @@ public class UserController {
         return json;
     }
 
+    @PostMapping(value = "add_appraise")
+    @ResponseBody
+    public Map<String, Object> addAppraise(@RequestParam("fid") String fid, @RequestParam("appraise") String appraise, HttpSession session) {
+        Map<String, Object> json = new HashMap<>();
+        try {
+            String uid = (String) session.getAttribute("uid");
+            json.put("success", userService.addFriendAppraise(uid, fid, appraise));
+        } catch (NullPointerException npe) {
+            json.put("success", false);
+            json.put("error", "bad authorized");
+        }
+        return json;
+    }
+
+    @PostMapping(value = "appraises")
+    @ResponseBody
+    public Map<String, Object> getAppraises(@RequestParam("uid") String uid, HttpSession session) {
+        Map<String, Object> json = new HashMap<>();
+        try {
+            String _uid = (String) session.getAttribute("uid");
+            if(uid.equals(_uid) || relationService.isFriends(uid, _uid)) {
+                List<FriendAppraise> appraises = userService.getFriendAppraiseByUid(uid);
+                json.put("success", true);
+                json.put("appraises", appraises);
+            } else {
+                json.put("success", false);
+            }
+        } catch (NullPointerException npe) {
+            json.put("success", false);
+            json.put("error", "bad authorize");
+        }
+        return json;
+    }
 }

@@ -66,4 +66,13 @@ public class RelationService {
     public boolean changeStatus(String from, String to, String status) {
         return relationDao.changeStatus(from, to, status) > 0;
     }
+
+    public boolean isFriends(String u1id, String u2id) {
+        if(u1id.compareTo(u2id) > 0) {
+            String tmp = u1id;
+            u1id = u2id;
+            u2id = tmp;
+        }
+        return relationDao.searchRelation(u1id, u2id).size() > 0;
+    }
 }

@@ -11,10 +11,24 @@
         <result column="birthday" property="birthday" />
     </resultMap>
 
+    <!--获取好友印象-->
+    <resultMap id="friend_appraise_map" type="chat.entity.FriendAppraise">
+        <result column="appraise" property="appraise" />
+        <association property="from" javaType="chat.entity.User">
+            <result column="uname" property="uname" />
+        </association>
+    </resultMap>
+
     <!--插入用户资料，用于新增用户（注册）-->
     <insert id="register">
         INSERT INTO users
         VALUE(#{uid}, #{uname}, #{password}, #{gender}, #{birthday})
+    </insert>
+
+    <!--添加好友印象-->
+    <insert id="addFriendAppraise">
+        INSERT INTO friend_appraise(`from`, `to`, appraise)
+        VALUE(#{from}, #{to}, #{appraise})
     </insert>
 
     <!--根据用户名和密码查找用户信息，用于登录-->
@@ -36,5 +50,15 @@
         SELECT uid, uname, birthday, gender
         FROM users
         WHERE uname LIKE '%${uname}%'
+    </select>
+
+    <!--查询好友对自己的评价-->
+    <select id="getFriendAppraiseByUid" resultMap="friend_appraise_map">
+        SELECT *
+        FROM friend_appraise, users
+        WHERE `to` = #{to}
+        AND `from` = users.uid
+        ORDER BY rand()
+        LIMIT 5
     </select>
 </mapper>

@@ -33,6 +33,11 @@
         </association>
     </resultMap>
 
+    <resultMap id="isfriend_map" type="chat.entity.Relation">
+        <result column="u1id" property="u1id" />
+        <result column="u2id" property="u2id" />
+    </resultMap>
+
     <!--添加关系-->
     <insert id="addRelation">
         INSERT INTO relation
@@ -97,4 +102,9 @@
         WHERE `from` = #{from} AND `to` = #{to}
     </update>
 
+    <select id="searchRelation" resultMap="isfriend_map">
+        SELECT u1id, u2id
+        FROM relation
+        WHERE u1id = #{u1id} AND u2id = #{u2id}
+    </select>
 </mapper>

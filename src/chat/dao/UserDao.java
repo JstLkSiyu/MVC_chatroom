@@ -1,5 +1,6 @@
 package chat.dao;
 
+import chat.entity.FriendAppraise;
 import chat.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,7 @@ public interface UserDao {
 
     List<User> searchUsersByUname(@Param("uname") String uname);
 
+    List<FriendAppraise> getFriendAppraiseByUid(@Param("to") String to);
+
+    int addFriendAppraise(@Param("from") String from, @Param("to") String to, @Param("appraise") String appraise);
 }

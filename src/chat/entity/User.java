@@ -5,22 +5,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class User {
-    public static ArrayList<User> connect_users = new ArrayList<>();
-
     private String uid;
     private String uname;
     private String password;
     private Timestamp birthday;
     private String gender;
-
-    public static User findUserByUid(String uid) {
-        for(User user : connect_users) {
-            if(user.uid.equals(uid)) {
-                return user;
-            }
-        }
-        return null;
-    }
 
     /* Getter */
     public String getUid() {

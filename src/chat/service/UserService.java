@@ -1,6 +1,7 @@
 package chat.service;
 
 import chat.dao.UserDao;
+import chat.entity.FriendAppraise;
 import chat.entity.User;
 import chat.utils.MiscUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,4 +33,11 @@ public class UserService {
         return userDao.searchUsersByUname(uname);
     }
 
+    public boolean addFriendAppraise(String from, String to, String appraise) {
+        return userDao.addFriendAppraise(from, to, appraise) > 0;
+    }
+
+    public List<FriendAppraise> getFriendAppraiseByUid(String uid) {
+        return userDao.getFriendAppraiseByUid(uid);
+    }
 }

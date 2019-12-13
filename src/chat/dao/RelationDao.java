@@ -1,6 +1,7 @@
 package chat.dao;
 
 import chat.entity.FriendRequest;
+import chat.entity.Relation;
 import chat.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -27,4 +28,6 @@ public interface RelationDao {
     List<FriendRequest> getFriendRequestByToUid(@Param("uid") String uid);
 
     int changeStatus(@Param("from") String from, @Param("to") String to, @Param("status") String status);
+
+    List<Relation> searchRelation(@Param("u1id") String u1id, @Param("u2id") String u2id);
 }

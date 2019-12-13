@@ -9,6 +9,8 @@ public class MsgLog {
     private Timestamp log_time;
     private String status;
 
+    private User talker;
+
     /*
     Getter
      */
@@ -32,9 +34,13 @@ public class MsgLog {
         return log_time;
     }
 
+    public User getTalker() {
+        return talker;
+    }
+
     /*
-            Setter
-             */
+                Setter
+                 */
     public void setFrom(String from) {
         this.from = from;
     }
@@ -53,5 +59,9 @@ public class MsgLog {
 
     public void setLog_time(Timestamp log_time) {
         this.log_time = log_time;
+    }
+
+    public void setTalker(User talker) {
+        this.talker = talker;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -54,6 +55,10 @@ public class MiscUtils {
 
     public static Timestamp convertLocalDateTimeToTimestamp(LocalDateTime time) {
         return Timestamp.valueOf(time);
+    }
+
+    public static String convertTimestampToString(Timestamp time) {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time);
     }
 
     public static Map<String, Object> packMessageJson(String uid, String msg) {

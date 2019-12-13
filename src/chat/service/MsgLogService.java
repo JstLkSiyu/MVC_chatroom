@@ -24,4 +24,7 @@ public class MsgLogService {
         return msgLogDao.searchRecentLogByUidAndFid(uid, fid, limit);
     }
 
+    public List<MsgLog> download(String uid, String fid) {
+        return msgLogDao.downloadLog(uid, fid);
+    }
 }

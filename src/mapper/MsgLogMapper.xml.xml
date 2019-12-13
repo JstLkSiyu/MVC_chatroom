@@ -8,7 +8,16 @@
         <result column="to" property="to" />
         <result column="msg" property="msg" />
         <result column="log_time" property="log_time" />
-        <result column="status" property="status" />
+    </resultMap>
+
+    <resultMap id="download_log_map" type="chat.entity.MsgLog">
+        <result column="from" property="from" />
+        <result column="to" property="to" />
+        <result column="msg" property="msg" />
+        <result column="log_time" property="log_time" />
+        <association property="talker" javaType="chat.entity.User">
+            <result column="uname" property="uname" />
+        </association>
     </resultMap>
 
     <!--添加一条未读消息-->
@@ -35,4 +44,14 @@
         AND `to` = #{to}
         AND status = 'unread'
     </update>
+
+    <!--下载所有聊天记录-->
+    <select id="downloadLog" resultMap="download_log_map">
+        SELECT *
+        FROM msg_log, users
+        WHERE (`from` = #{fid} AND `to` = #{uid}) OR
+        (`from` = #{uid} AND `to` = #{fid}) AND
+        uid = `from`
+        ORDER BY log_time
+    </select>
 </mapper>

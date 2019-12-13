@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 public class WebsocketController {
 
     public enum msgType {
-        MESSAGE, SYSTEM
+        MESSAGE, SYSTEM, AGREE_REQ
     }
 
     private static ConcurrentSkipListMap<String, WebsocketController> webSocketMap = new ConcurrentSkipListMap<>();
