@@ -20,7 +20,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
-@RequestMapping("friend")
+@RequestMapping("/friend")
 public class RelationController {
     @Autowired
     private RelationService relationService;

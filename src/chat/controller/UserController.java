@@ -16,7 +16,7 @@ import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -24,7 +24,7 @@ public class UserController {
     @Autowired
     private RelationService relationService;
 
-    @PostMapping(value = "login")
+    @PostMapping(value = "/login")
     @ResponseBody
     public Map<String, Object> login(@RequestParam("username") String uname, @RequestParam("password") String password, HttpSession session) {
         List<User> result = userService.login(uname, password);

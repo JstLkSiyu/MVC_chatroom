@@ -19,7 +19,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
-@RequestMapping("chat")
+@RequestMapping("/chat")
 public class MsgLogController {
     @Autowired
     private MsgLogService msgLogService;
