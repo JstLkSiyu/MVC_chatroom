@@ -1,7 +1,7 @@
 package chat.entity;
 
 public class FriendRequest {
-    public enum FriendQueryStatus {
+    public enum FriendRequestStatus {
         INCOMPLETE, AGREE, REJECT
     }
 

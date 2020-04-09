@@ -49,9 +49,8 @@
     <select id="downloadLog" resultMap="download_log_map">
         SELECT *
         FROM msg_log, users
-        WHERE (`from` = #{fid} AND `to` = #{uid}) OR
-        (`from` = #{uid} AND `to` = #{fid}) AND
-        uid = `from`
+        WHERE (`from` = #{fid} AND `to` = #{uid} AND `from` = uid) OR
+        (`from` = #{uid} AND `to` = #{fid} AND `from` = uid)
         ORDER BY log_time
     </select>
 </mapper>
